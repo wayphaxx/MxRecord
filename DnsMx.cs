@@ -7,7 +7,7 @@ namespace DnsMxsRecord
 
     public class DnsMx
     {        
-       
+       //using dnsapi
         [DllImport("dnsapi", EntryPoint="DnsQuery_W", CharSet=CharSet.Unicode, SetLastError=true, ExactSpelling=true)]
         private static extern int DnsQuery([MarshalAs(UnmanagedType.VBByRefStr)]ref string pszName, QueryTypes wType, QueryOptions options, int aipServers, ref IntPtr ppQueryResults, int pReserved);
 
@@ -55,7 +55,10 @@ namespace DnsMxsRecord
 						return (string[]) list1.ToArray(typeof(string));
 					}
 
-			private enum QueryOptions
+
+
+        //these are from here https://www.pinvoke.net/default.aspx/dnsapi.DnsQuery
+        private enum QueryOptions
         {         
             DNS_QUERY_ACCEPT_TRUNCATED_RESPONSE = 1,
             DNS_QUERY_BYPASS_CACHE = 8,
@@ -94,4 +97,3 @@ namespace DnsMxsRecord
         }
     }
 }
-
