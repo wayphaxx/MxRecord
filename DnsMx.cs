@@ -1,4 +1,4 @@
-namespace PAB.DnsUtils
+namespace DnsMxsRecord
 {
     using System;
     using System.Collections;
@@ -7,9 +7,7 @@ namespace PAB.DnsUtils
 
     public class DnsMx
     {        
-        public DnsMx()
-        {
-        }
+       
         [DllImport("dnsapi", EntryPoint="DnsQuery_W", CharSet=CharSet.Unicode, SetLastError=true, ExactSpelling=true)]
         private static extern int DnsQuery([MarshalAs(UnmanagedType.VBByRefStr)]ref string pszName, QueryTypes wType, QueryOptions options, int aipServers, ref IntPtr ppQueryResults, int pReserved);
 
@@ -22,20 +20,18 @@ namespace PAB.DnsUtils
             IntPtr ptr1=IntPtr.Zero ;
 		    IntPtr ptr2=IntPtr.Zero ;
             MXRecord recMx;
-            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
-            {
-                throw new NotSupportedException();
-            }
-						ArrayList list1 = new ArrayList();
-					try
+           
+			ArrayList list1 = new ArrayList();
+
+                    try
 					{
 					
-						int num1 = DnsMx.DnsQuery(ref domain, QueryTypes.DNS_TYPE_MX, QueryOptions.DNS_QUERY_BYPASS_CACHE, 0, ref ptr1, 0);
+						int num1 = DnsQuery(ref domain, QueryTypes.DNS_TYPE_MX, QueryOptions.DNS_QUERY_BYPASS_CACHE, 0, ref ptr1, 0);
 						if (num1 != 0)
 						{
 							if(num1==9003)
 							{
-							list1.Add("DNS record does not exist");
+							list1.Add("NE OBSTAJA");
 							}
 							else
 							{
@@ -54,7 +50,7 @@ namespace PAB.DnsUtils
 					}
 					finally
 					{
-						DnsMx.DnsRecordListFree(ptr1, 0);
+						DnsRecordListFree(ptr1, 0);
 					}
 						return (string[]) list1.ToArray(typeof(string));
 					}
